@@ -3,13 +3,14 @@ const crypto = require('crypto');
 const fs = require('fs');
 const path = require('path');
 
-// ABI — only the functions we call from the backend
+// ABI - only the functions we call from the backend
 const CONTRACT_ABI = [
   'function storeCertificate(string certificateId, bytes32 dataHash) external',
   'function revokeCertificate(string certificateId) external',
   'function getCertificate(string certificateId) external view returns (string, bytes32, address, uint256, bool)',
   'function verifyCertificate(string certificateId, bytes32 dataHash) external view returns (bool)',
   'function certificateExistsOnChain(string certificateId) external view returns (bool)',
+  'function totalCertificates() external view returns (uint256)',
   'event CertificateIssued(string indexed certificateId, bytes32 dataHash, address indexed issuedBy, uint256 issuedAt)',
   'event CertificateRevoked(string indexed certificateId, uint256 revokedAt)'
 ];
@@ -60,9 +61,9 @@ async function storeCertificateOnChain(certData) {
 
   const ctx = getContract();
   if (!ctx) {
-    // ── Simulation Mode ──
+    // Simulation Mode
     const mockTxHash = 'mock-tx-0x' + crypto.randomBytes(32).toString('hex');
-    console.log(`[BLOCKCHAIN] Simulation mode — mock tx: ${mockTxHash}`);
+    console.log(`[BLOCKCHAIN] Simulation mode - mock tx: ${mockTxHash}`);
     return {
       txHash: mockTxHash,
       hash,
@@ -91,7 +92,7 @@ async function storeCertificateOnChain(certData) {
 async function revokeCertificateOnChain(certificateId) {
   const ctx = getContract();
   if (!ctx) {
-    console.log(`[BLOCKCHAIN] Simulation mode — mock revoke for ${certificateId}`);
+    console.log(`[BLOCKCHAIN] Simulation mode - mock revoke for ${certificateId}`);
     return { txHash: 'mock-revoke-0x' + crypto.randomBytes(32).toString('hex') };
   }
 
@@ -147,7 +148,33 @@ async function verifyCertificateOnChain(certData, storedHash) {
   }
 }
 
+/**
+ * Describe the chain connection for the dashboard. Reads the contract's own
+ * certificate counter when connected.
+ */
+async function getChainInfo() {
+  const ctx = getContract();
+  if (!ctx) {
+    return { mode: 'simulation', network: 'simulation', contractAddress: null, onChainTotal: null, explorerUrl: null };
+  }
+  const address = process.env.CONTRACT_ADDRESS;
+  let onChainTotal = null;
+  try {
+    onChainTotal = Number(await ctx.contract.totalCertificates());
+  } catch (err) {
+    console.error('[BLOCKCHAIN] totalCertificates error:', err.message);
+  }
+  return {
+    mode: 'live',
+    network: 'sepolia',
+    contractAddress: address,
+    onChainTotal,
+    explorerUrl: `https://sepolia.etherscan.io/address/${address}`
+  };
+}
+
 module.exports = {
+  getChainInfo,
   computeCertificateHash,
   storeCertificateOnChain,
   revokeCertificateOnChain,

@@ -17,7 +17,7 @@ const verifyRoutes = require('./routes/verify');
 const app = express();
 const PORT = process.env.PORT || 5000;
 
-// ─── Middleware ───────────────────────────────────────────────────────────────
+// Middleware
 app.use(cors({
   origin: '*',
   methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
@@ -29,7 +29,7 @@ app.use(express.urlencoded({ extended: true }));
 // Serve static PDF files
 app.use('/pdfs', express.static(path.join(__dirname, 'pdfs')));
 
-// ─── Routes ───────────────────────────────────────────────────────────────────
+// Routes
 app.use('/api/auth', authRoutes);
 app.use('/api/certificates', certificateRoutes);
 app.use('/api/verify', verifyRoutes);
@@ -48,7 +48,7 @@ app.get('/api/health', (req, res) => {
   });
 });
 
-// ─── Error Handler ────────────────────────────────────────────────────────────
+// Error Handler
 app.use((err, req, res, next) => {
   console.error('[ERROR]', err.message);
   res.status(err.status || 500).json({
@@ -62,7 +62,7 @@ app.use((req, res) => {
   res.status(404).json({ success: false, message: 'Route not found' });
 });
 
-// ─── Database Connection ──────────────────────────────────────────────────────
+// Database Connection
 mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/certchain')
   .then(() => {
     console.log('[DB] Connected to MongoDB');

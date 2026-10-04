@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CertChain | Certificate issuing and verification</title>
+  <meta name="description" content="Issue course certificates and verify them against a record on the Ethereum Sepolia test network." />
+  <link rel="stylesheet" href="./css/style.css" />
+  <link rel="icon" type="image/svg+xml" href="./img/logo.svg" />
+</head>
+<body>
+
+<nav class="navbar">
+  <div class="navbar-inner">
+    <a href="./index.html" class="navbar-brand"><img src="./img/logo.svg" alt="" />CertChain</a>
+    <ul class="navbar-links">
+      <li><a href="./index.html" class="active">Home</a></li>
+      <li><a href="./verify.html">Verify</a></li>
+      <li><a href="./index.html#how-it-works">How it works</a></li>
+    </ul>
+    <div class="navbar-actions">
+      <a href="./login.html" class="btn btn-primary btn-sm">Organization login</a>
+    </div>
+  </div>
+</nav>
+
+<section class="hero">
+  <div>
+    <h1 class="hero-title">Certificates you can check against a blockchain record</h1>
+    <p class="hero-subtitle">
+      An organization issues a course certificate as a PDF. A hash of the certificate is
+      stored in a smart contract on the Ethereum Sepolia test network, so anyone with the
+      certificate ID or QR code can look it up and see whether it is valid, expired or revoked.
+    </p>
+    <div class="hero-actions">
+      <a href="./verify.html" class="btn btn-primary btn-lg">Verify a certificate</a>
+      <a href="./login.html" class="btn btn-outline btn-lg">Organization login</a>
+    </div>
+  </div>
+  <div class="hero-art">
+    <img src="./img/hero-certificate.svg" alt="A certificate with a seal and QR code, marked valid, with its transaction hash below" />
+  </div>
+</section>
+
+<section class="section">
+  <div class="card quick-verify">
+    <h2>Check a certificate ID</h2>
+    <p>Type the ID printed on the certificate. You do not need an account.</p>
+    <form id="quick-verify-form">
+      <div class="verify-input-row">
+        <input id="quick-cert-id" class="form-control" placeholder="CERT-XXXXXXXX-XXXXXXXX" />
+        <button type="submit" class="btn btn-primary">Verify</button>
+      </div>
+    </form>
+  </div>
+</section>
+
+<section class="section" id="how-it-works">
+  <div class="steps-layout">
+    <div class="steps-art">
+      <img src="./img/steps-guide.svg" alt="Four steps: issue, record, deliver, verify" />
+    </div>
+    <div>
+      <h2>How it works</h2>
+      <ol class="plain-list">
+        <li>An organization signs in and enters the recipient's name, email and course.</li>
+        <li>The server hashes the certificate data and records the hash in the smart contract.</li>
+        <li>A PDF with a QR code is generated and emailed to the recipient.</li>
+        <li>The verify page compares the stored record with the certificate and shows the result, along with the transaction hash and a link to Etherscan.</li>
+      </ol>
+      <p style="margin-top:16px;max-width:640px">
+        A certificate can carry an expiry date and can be revoked by the organization that issued it.
+        Revocation is written to the contract as well.
+      </p>
+    </div>
+  </div>
+</section>
+
+<footer class="site-footer">
+  <div class="footer-inner">
+    <div>
+      <div class="footer-brand"><img src="./img/logo.svg" alt="" />CertChain</div>
+      <p class="footer-about">Issue course certificates and check them against a record in a smart contract on the Ethereum Sepolia test network.</p>
+    </div>
+    <div>
+      <h4>Pages</h4>
+      <ul>
+        <li><a href="./index.html">Home</a></li>
+        <li><a href="./verify.html">Verify a certificate</a></li>
+        <li><a href="./login.html">Organization login</a></li>
+      </ul>
+    </div>
+    <div>
+      <h4>Built with</h4>
+      <ul>
+        <li>Solidity smart contract</li>
+        <li>Ethereum Sepolia testnet</li>
+        <li>Node.js and Express</li>
+        <li>MongoDB</li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">&copy; 2026 CertChain. A course project; certificates are issued on a test network.</div>
+</footer>
+
+<div id="toast-container" class="toast-container"></div>
+
+<script src="./js/app.js"></script>
+<script>
+  document.getElementById('quick-verify-form').addEventListener('submit', function (e) {
+    e.preventDefault();
+    const id = document.getElementById('quick-cert-id').value.trim();
+    if (!id) { showToast('Please enter a Certificate ID.', 'warning'); return; }
+    window.location.href = `./verify.html?id=${encodeURIComponent(id)}`;
+  });
+</script>
+</body>
+</html>

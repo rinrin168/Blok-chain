@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Certificates - CertChain</title>
+  <link rel="stylesheet" href="./css/style.css" />
+  <link rel="icon" type="image/svg+xml" href="./img/logo.svg" />
+</head>
+<body class="page-wrapper">
+
+<!-- Navbar -->
+<nav class="navbar">
+  <div class="navbar-inner">
+    <a href="./dashboard.html" class="navbar-brand"><img src="./img/logo.svg" alt="" />CertChain</a>
+    <div class="navbar-crumb"><a href="./dashboard.html">Organization portal</a><span>/</span><strong>All certificates</strong></div>
+    <div class="navbar-actions">
+      <div class="navbar-user"><span class="avatar" id="navbar-avatar">C</span><span id="navbar-org">Organization</span></div>
+      <button id="logout-btn" class="btn btn-outline btn-sm">Logout</button>
+    </div>
+  </div>
+</nav>
+
+<div class="dashboard-layout">
+  <!-- Sidebar -->
+  <aside class="sidebar">
+    <div class="sidebar-section">Main</div>
+    <ul class="sidebar-nav">
+      <li><a href="./dashboard.html"    data-page="dashboard">Dashboard</a></li>
+      <li><a href="./issue.html"        data-page="issue">Issue Certificate</a></li>
+      <li><a href="./certificates.html" data-page="certificates">All Certificates</a></li>
+    </ul>
+    <div class="sidebar-section">Public</div>
+    <ul class="sidebar-nav">
+      <li><a href="./verify.html" target="_blank">Verify Page</a></li>
+    </ul>
+  </aside>
+
+  <!-- Main -->
+  <main class="dashboard-body">
+    <div class="page-header-row">
+      <div class="page-header">
+        <h1>All Certificates</h1>
+        <p>Search, filter, download or revoke the certificates your organization has issued.</p>
+      </div>
+      <div style="display:flex;gap:8px">
+        <button id="refresh-btn" class="btn btn-outline btn-sm">Refresh</button>
+        <a href="./issue.html" class="btn btn-primary btn-sm">Issue New</a>
+      </div>
+    </div>
+
+    <div class="card list-card">
+      <div class="list-toolbar">
+        <input id="search-input" class="search-input" placeholder="Search by name, email, course or ID" />
+        <div class="filter-tabs">
+          <button class="filter-tab active" data-status="all">All <span class="count" id="count-all">0</span></button>
+          <button class="filter-tab" data-status="active">Active <span class="count" id="count-active">0</span></button>
+          <button class="filter-tab" data-status="expired">Expired <span class="count" id="count-expired">0</span></button>
+          <button class="filter-tab" data-status="revoked">Revoked <span class="count" id="count-revoked">0</span></button>
+        </div>
+      </div>
+
+      <div class="table-scroll">
+        <table class="list-table">
+          <thead>
+            <tr>
+              <th>Recipient</th>
+              <th>Course</th>
+              <th>Certificate ID</th>
+              <th>Issued</th>
+              <th>Expires</th>
+              <th>Status</th>
+              <th class="th-actions">Actions</th>
+            </tr>
+          </thead>
+          <tbody id="cert-tbody">
+            <tr><td colspan="7" class="text-center"><span class="spinner"></span></td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="list-foot" id="table-foot"></div>
+    </div>
+  </main>
+</div>
+
+<!-- Certificate Detail Modal -->
+<div id="cert-modal" class="modal-overlay">
+  <div class="modal">
+    <div class="modal-header">
+      <h3 style="font-size:1rem">Certificate Details</h3>
+      <button id="close-modal" class="modal-close">×</button>
+    </div>
+    <div id="modal-content">Loading...</div>
+  </div>
+</div>
+
+<div id="toast-container" class="toast-container"></div>
+<script src="./js/app.js"></script>
+<script src="./js/certificates.js"></script>
+</body>
+</html>

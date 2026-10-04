@@ -1,0 +1,77 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1100 740" width="1100" height="740">
+<defs><marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#3F6370"/></marker></defs>
+<rect width="1100" height="740" fill="#FFFFFF"/>
+<text x="24" y="30" text-anchor="start" font-family="Helvetica, Arial, sans-serif" font-size="16" font-weight="700" fill="#1F2E33">Figure 1. System architecture</text>
+<rect x="30" y="55" width="1040" height="120" fill="#E4EDF0" fill-opacity="0.45" stroke="#577E89" stroke-dasharray="6 4"/>
+<text x="42" y="75" font-family="Helvetica, Arial, sans-serif" font-size="12" font-weight="700" fill="#1F2E33">Client layer (browser: HTML, CSS, JavaScript)</text>
+<rect x="60" y="95" width="170" height="60" rx="6" fill="#E4EDF0" stroke="#577E89" stroke-width="1.5"/>
+<text x="145.0" y="121.7" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="12" font-weight="400" fill="#1F2E33">Home / Verify</text>
+<text x="145.0" y="136.7" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="12" font-weight="400" fill="#1F2E33">(public pages)</text>
+<rect x="260" y="95" width="170" height="60" rx="6" fill="#E4EDF0" stroke="#577E89" stroke-width="1.5"/>
+<text x="345.0" y="129.2" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="12" font-weight="400" fill="#1F2E33">Login</text>
+<rect x="460" y="95" width="170" height="60" rx="6" fill="#E4EDF0" stroke="#577E89" stroke-width="1.5"/>
+<text x="545.0" y="129.2" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="12" font-weight="400" fill="#1F2E33">Dashboard</text>
+<rect x="660" y="95" width="170" height="60" rx="6" fill="#E4EDF0" stroke="#577E89" stroke-width="1.5"/>
+<text x="745.0" y="129.2" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="12" font-weight="400" fill="#1F2E33">Issue certificate</text>
+<rect x="860" y="95" width="170" height="60" rx="6" fill="#E4EDF0" stroke="#577E89" stroke-width="1.5"/>
+<text x="945.0" y="129.2" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="12" font-weight="400" fill="#1F2E33">All certificates</text>
+<rect x="30" y="235" width="1040" height="255" fill="#FBF3E8" fill-opacity="0.45" stroke="#E1A36F" stroke-dasharray="6 4"/>
+<text x="42" y="255" font-family="Helvetica, Arial, sans-serif" font-size="12" font-weight="700" fill="#1F2E33">Application layer (Node.js + Express, one server on port 5000)</text>
+<rect x="60" y="275" width="190" height="60" rx="6" fill="#FBF3E8" stroke="#E1A36F" stroke-width="1.5"/>
+<text x="155.0" y="295.1" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="11" font-weight="400" fill="#1F2E33">routes/auth.js</text>
+<text x="155.0" y="308.9" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="11" font-weight="400" fill="#1F2E33">POST /api/auth/login</text>
+<text x="155.0" y="322.6" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="11" font-weight="400" fill="#1F2E33">GET /api/auth/me</text>
+<rect x="270" y="275" width="250" height="60" rx="6" fill="#FBF3E8" stroke="#E1A36F" stroke-width="1.5"/>
+<text x="395.0" y="295.1" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="11" font-weight="400" fill="#1F2E33">routes/certificates.js</text>
+<text x="395.0" y="308.9" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="11" font-weight="400" fill="#1F2E33">issue, list, stats, chain-info,</text>
+<text x="395.0" y="322.6" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="11" font-weight="400" fill="#1F2E33">revoke, pdf (JWT required)</text>
+<rect x="540" y="275" width="190" height="60" rx="6" fill="#FBF3E8" stroke="#E1A36F" stroke-width="1.5"/>
+<text x="635.0" y="295.1" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="11" font-weight="400" fill="#1F2E33">routes/verify.js</text>
+<text x="635.0" y="308.9" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="11" font-weight="400" fill="#1F2E33">GET /api/verify/:id</text>
+<text x="635.0" y="322.6" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="11" font-weight="400" fill="#1F2E33">(public)</text>
+<rect x="750" y="275" width="140" height="60" rx="6" fill="#FBF3E8" stroke="#E1A36F" stroke-width="1.5"/>
+<text x="820.0" y="302.0" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="11" font-weight="400" fill="#1F2E33">middleware/auth.js</text>
+<text x="820.0" y="315.7" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="11" font-weight="400" fill="#1F2E33">JWT check</text>
+<rect x="910" y="275" width="140" height="60" rx="6" fill="#FBF3E8" stroke="#E1A36F" stroke-width="1.5"/>
+<text x="980.0" y="302.0" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="11" font-weight="400" fill="#1F2E33">express.static</text>
+<text x="980.0" y="315.7" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="11" font-weight="400" fill="#1F2E33">serves frontend/</text>
+<rect x="60" y="395" width="190" height="60" rx="6" fill="#E3EFEE" stroke="#6F9F9C" stroke-width="1.5"/>
+<text x="155.0" y="415.1" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="11" font-weight="400" fill="#1F2E33">models/</text>
+<text x="155.0" y="428.9" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="11" font-weight="400" fill="#1F2E33">User, Certificate</text>
+<text x="155.0" y="442.6" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="11" font-weight="400" fill="#1F2E33">(Mongoose)</text>
+<rect x="330" y="395" width="190" height="60" rx="6" fill="#FBF3E8" stroke="#E1A36F" stroke-width="1.5"/>
+<text x="425.0" y="422.0" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="11" font-weight="400" fill="#1F2E33">services/blockchain.js</text>
+<text x="425.0" y="435.7" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="11" font-weight="400" fill="#1F2E33">ethers.js v6</text>
+<rect x="540" y="395" width="190" height="60" rx="6" fill="#FBF3E8" stroke="#E1A36F" stroke-width="1.5"/>
+<text x="635.0" y="422.0" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="11" font-weight="400" fill="#1F2E33">services/pdf.js</text>
+<text x="635.0" y="435.7" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="11" font-weight="400" fill="#1F2E33">PDFKit + qrcode</text>
+<rect x="750" y="395" width="190" height="60" rx="6" fill="#FBF3E8" stroke="#E1A36F" stroke-width="1.5"/>
+<text x="845.0" y="422.0" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="11" font-weight="400" fill="#1F2E33">services/email.js</text>
+<text x="845.0" y="435.7" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="11" font-weight="400" fill="#1F2E33">Nodemailer</text>
+<path d="M60,579 a95.0,9 0 0 1 190,0 v62 a95.0,9 0 0 1 -190,0 z" fill="#E3EFEE" stroke="#6F9F9C" stroke-width="1.5"/><path d="M60,579 a95.0,9 0 0 0 190,0" fill="none" stroke="#6F9F9C" stroke-width="1.5"/>
+<text x="155.0" y="612.7" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="12" font-weight="400" fill="#1F2E33">MongoDB Atlas</text>
+<text x="155.0" y="627.7" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="12" font-weight="400" fill="#1F2E33">users, certificates</text>
+<rect x="330" y="580" width="190" height="60" rx="6" fill="#F3EFE0" stroke="#B9B08A" stroke-width="1.5"/>
+<text x="425.0" y="606.7" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="12" font-weight="400" fill="#1F2E33">Infura JSON-RPC</text>
+<text x="425.0" y="621.7" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="12" font-weight="400" fill="#1F2E33">sepolia.infura.io</text>
+<rect x="550" y="575" width="180" height="70" rx="6" fill="#577E89" stroke="#3F6370" stroke-width="1.5"/>
+<text x="640.0" y="600.1" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="11" font-weight="400" fill="#FFFFFF">Ethereum Sepolia</text>
+<text x="640.0" y="613.9" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="11" font-weight="400" fill="#FFFFFF">CertificateRegistry</text>
+<text x="640.0" y="627.6" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="11" font-weight="400" fill="#FFFFFF">contract</text>
+<rect x="750" y="580" width="190" height="60" rx="6" fill="#F3EFE0" stroke="#B9B08A" stroke-width="1.5"/>
+<text x="845.0" y="606.7" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="12" font-weight="400" fill="#1F2E33">SMTP server</text>
+<text x="845.0" y="621.7" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="12" font-weight="400" fill="#1F2E33">(Gmail)</text>
+<path d="M550.0,175.0 L550.0,235.0" fill="none" stroke="#3F6370" stroke-width="1.5" marker-start="url(#arr)" marker-end="url(#arr)"/>
+<rect x="443.0" y="196.0" width="214.0" height="18" fill="#FFFFFF" fill-opacity="0.92"/>
+<text x="550.0" y="208.8" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="11" font-weight="400" fill="#1F2E33">HTTP: static files + JSON REST API</text>
+<path d="M395.0,335.0 L395.0,365.0 L425.0,365.0 L425.0,395.0" fill="none" stroke="#3F6370" stroke-width="1.5" marker-end="url(#arr)"/>
+<path d="M395.0,335.0 L395.0,365.0 L635.0,365.0 L635.0,395.0" fill="none" stroke="#3F6370" stroke-width="1.5" marker-end="url(#arr)"/>
+<path d="M395.0,335.0 L395.0,365.0 L845.0,365.0 L845.0,395.0" fill="none" stroke="#3F6370" stroke-width="1.5" marker-end="url(#arr)"/>
+<path d="M635.0,335.0 L635.0,365.0 L425.0,365.0 L425.0,395.0" fill="none" stroke="#3F6370" stroke-width="1.5" marker-end="url(#arr)"/>
+<path d="M155.0,335.0 L155.0,395.0" fill="none" stroke="#3F6370" stroke-width="1.5" marker-end="url(#arr)"/>
+<path d="M155.0,455.0 L155.0,570.0" fill="none" stroke="#3F6370" stroke-width="1.5" marker-end="url(#arr)"/>
+<path d="M425.0,455.0 L425.0,580.0" fill="none" stroke="#3F6370" stroke-width="1.5" marker-end="url(#arr)"/>
+<path d="M520.0,610.0 L550.0,610.0" fill="none" stroke="#3F6370" stroke-width="1.5" marker-end="url(#arr)"/>
+<path d="M845.0,455.0 L845.0,580.0" fill="none" stroke="#3F6370" stroke-width="1.5" marker-end="url(#arr)"/>
+<text x="60" y="700" text-anchor="start" font-family="Helvetica, Arial, sans-serif" font-size="11" font-weight="400" fill="#55696F">Simulation mode: with no RPC URL, wallet key or contract address in .env, services/blockchain.js returns mock transaction hashes instead of calling Sepolia.</text>
+</svg>

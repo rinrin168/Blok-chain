@@ -1,0 +1,41 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1100 700" width="1100" height="700">
+<defs><marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#3F6370"/></marker></defs>
+<rect width="1100" height="700" fill="#FFFFFF"/>
+<text x="24" y="30" text-anchor="start" font-family="Helvetica, Arial, sans-serif" font-size="16" font-weight="700" fill="#1F2E33">Figure 4. System flow: verifying a certificate</text>
+<rect x="55.0" y="55" width="150" height="40" rx="4" fill="#E4EDF0" stroke="#577E89"/>
+<text x="130.0" y="71.7" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="12" font-weight="700" fill="#1F2E33">Public user</text>
+<text x="130.0" y="86.7" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="12" font-weight="700" fill="#1F2E33">(browser)</text>
+<line x1="130" y1="95" x2="130" y2="675" stroke="#B9B08A" stroke-dasharray="5 4"/>
+<rect x="335.0" y="55" width="150" height="40" rx="4" fill="#FBF3E8" stroke="#E1A36F"/>
+<text x="410.0" y="79.2" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="12" font-weight="700" fill="#1F2E33">Express API</text>
+<line x1="410" y1="95" x2="410" y2="675" stroke="#B9B08A" stroke-dasharray="5 4"/>
+<rect x="615.0" y="55" width="150" height="40" rx="4" fill="#E3EFEE" stroke="#6F9F9C"/>
+<text x="690.0" y="79.2" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="12" font-weight="700" fill="#1F2E33">MongoDB</text>
+<line x1="690" y1="95" x2="690" y2="675" stroke="#B9B08A" stroke-dasharray="5 4"/>
+<rect x="885.0" y="55" width="150" height="40" rx="4" fill="#577E89" stroke="#3F6370"/>
+<text x="960.0" y="79.2" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="12" font-weight="700" fill="#FFFFFF">Sepolia contract</text>
+<line x1="960" y1="95" x2="960" y2="675" stroke="#B9B08A" stroke-dasharray="5 4"/>
+<line x1="130" y1="135" x2="410" y2="135" stroke="#3F6370" stroke-width="1.5" marker-end="url(#arr)"/>
+<text x="270.0" y="129.8" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="11" font-weight="400" fill="#1F2E33">GET /api/verify/:certificateId</text>
+<line x1="410" y1="181" x2="690" y2="181" stroke="#3F6370" stroke-width="1.5" marker-end="url(#arr)"/>
+<text x="550.0" y="175.8" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="11" font-weight="400" fill="#1F2E33">find certificate by ID</text>
+<line x1="690" y1="227" x2="410" y2="227" stroke="#3F6370" stroke-width="1.5" stroke-dasharray="6 4" marker-end="url(#arr)"/>
+<text x="550.0" y="221.8" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="11" font-weight="400" fill="#1F2E33">certificate record</text>
+<path d="M410,273 L454,273 L454,295 L412,295" fill="none" stroke="#3F6370" stroke-width="1.5" marker-end="url(#arr)"/>
+<text x="462.0" y="281.0" text-anchor="start" font-family="Helvetica, Arial, sans-serif" font-size="11" font-weight="400" fill="#1F2E33">Check expiry date</text>
+<text x="462.0" y="294.7" text-anchor="start" font-family="Helvetica, Arial, sans-serif" font-size="11" font-weight="400" fill="#1F2E33">(active becomes expired)</text>
+<path d="M410,333 L454,333 L454,355 L412,355" fill="none" stroke="#3F6370" stroke-width="1.5" marker-end="url(#arr)"/>
+<text x="462.0" y="341.0" text-anchor="start" font-family="Helvetica, Arial, sans-serif" font-size="11" font-weight="400" fill="#1F2E33">Recompute SHA-256 hash</text>
+<text x="462.0" y="354.7" text-anchor="start" font-family="Helvetica, Arial, sans-serif" font-size="11" font-weight="400" fill="#1F2E33">from the record</text>
+<line x1="410" y1="393" x2="960" y2="393" stroke="#3F6370" stroke-width="1.5" marker-end="url(#arr)"/>
+<text x="685.0" y="374.0" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="11" font-weight="400" fill="#1F2E33">certificateExistsOnChain(id)</text>
+<text x="685.0" y="387.7" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="11" font-weight="400" fill="#1F2E33">getCertificate(id)</text>
+<line x1="960" y1="445" x2="410" y2="445" stroke="#3F6370" stroke-width="1.5" stroke-dasharray="6 4" marker-end="url(#arr)"/>
+<text x="685.0" y="439.9" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="11" font-weight="400" fill="#1F2E33">stored hash + isRevoked flag</text>
+<path d="M410,491 L454,491 L454,513 L412,513" fill="none" stroke="#3F6370" stroke-width="1.5" marker-end="url(#arr)"/>
+<text x="462.0" y="499.0" text-anchor="start" font-family="Helvetica, Arial, sans-serif" font-size="11" font-weight="400" fill="#1F2E33">Compare hashes, decide:</text>
+<text x="462.0" y="512.7" text-anchor="start" font-family="Helvetica, Arial, sans-serif" font-size="11" font-weight="400" fill="#1F2E33">valid / expired / revoked</text>
+<line x1="410" y1="551" x2="130" y2="551" stroke="#3F6370" stroke-width="1.5" stroke-dasharray="6 4" marker-end="url(#arr)"/>
+<text x="270.0" y="532.0" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="11" font-weight="400" fill="#1F2E33">JSON: status, certificate fields,</text>
+<text x="270.0" y="545.7" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="11" font-weight="400" fill="#1F2E33">tx hash, Etherscan link</text>
+</svg>

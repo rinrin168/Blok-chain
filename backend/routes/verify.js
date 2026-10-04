@@ -4,7 +4,7 @@ const { verifyCertificateOnChain } = require('../services/blockchain');
 
 const router = express.Router();
 
-// ─── GET /api/verify/:certificateId ──────────────────────────────────────────
+// GET /api/verify/:certificateId
 router.get('/:certificateId', async (req, res) => {
   try {
     const { certificateId } = req.params;

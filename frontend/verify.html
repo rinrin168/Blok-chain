@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Verify Certificate - CertChain</title>
+  <meta name="description" content="Verify the authenticity of a digital certificate using its ID or QR code." />
+  <link rel="stylesheet" href="./css/style.css" />
+  <link rel="icon" type="image/svg+xml" href="./img/logo.svg" />
+  <!-- jsQR for QR scanning -->
+  <script src="https://cdn.jsdelivr.net/npm/jsqr@1.4.0/dist/jsQR.js"></script>
+</head>
+<body>
+
+<!-- Navbar -->
+<nav class="navbar">
+  <div class="navbar-inner">
+    <a href="./index.html" class="navbar-brand"><img src="./img/logo.svg" alt="" />CertChain</a>
+    <ul class="navbar-links">
+      <li><a href="./index.html">Home</a></li>
+      <li><a href="./verify.html" class="active">Verify</a></li>
+      <li><a href="./index.html#how-it-works">How it works</a></li>
+    </ul>
+    <div class="navbar-actions">
+      <a href="./login.html" class="btn btn-primary btn-sm">Organization login</a>
+    </div>
+  </div>
+</nav>
+
+<!-- Title band -->
+<header class="page-band">
+  <div class="band-inner">
+    <h1>Verify a certificate</h1>
+    <p>Look up a certificate by its ID or by scanning the QR code, and see what the record says.</p>
+    <ul class="band-points">
+      <li>No account needed</li>
+      <li>Reads the contract on Sepolia</li>
+      <li>Takes a few seconds</li>
+    </ul>
+  </div>
+</header>
+
+<!-- Main -->
+<div class="verify-page">
+  <div class="verify-layout">
+
+    <div class="verify-main">
+      <div class="card">
+        <form id="verify-form" novalidate>
+          <div class="form-group" style="margin-bottom:12px">
+            <label class="form-label" for="cert-id-input">Certificate ID</label>
+            <input id="cert-id-input" type="text" class="form-control id-input" placeholder="CERT-XXXXXXXX-XXXXXXXX" autocomplete="off" spellcheck="false" />
+            <p class="field-hint">The ID is printed on the certificate and sent in the email with the PDF.</p>
+          </div>
+          <div class="verify-actions">
+            <button id="verify-btn" type="submit" class="btn btn-primary btn-lg">Verify</button>
+            <button id="scan-qr-btn" type="button" class="btn btn-outline btn-lg">Scan QR Code</button>
+          </div>
+        </form>
+      </div>
+
+      <!-- QR Scanner -->
+      <div id="qr-section" class="hidden" style="margin-top:16px">
+        <div class="card" style="text-align:center">
+          <p id="qr-status" style="font-size:13px;color:var(--text-muted);margin-bottom:12px">Initializing camera...</p>
+          <video id="qr-video" style="width:100%;max-width:400px;border-radius:6px;background:#000" playsinline></video>
+          <canvas id="qr-canvas" style="display:none"></canvas>
+        </div>
+      </div>
+
+      <!-- Loading -->
+      <div id="loading-area" class="hidden" style="text-align:center;padding:40px">
+        <span class="spinner" style="width:32px;height:32px;border-width:3px"></span>
+        <p style="margin-top:16px">Checking the contract...</p>
+      </div>
+
+      <!-- Result -->
+      <div id="result-area" class="hidden">
+        <div id="result-container"></div>
+      </div>
+
+      <div class="card find-card">
+        <div class="aside-label">Where to find the ID</div>
+        <div class="find-body">
+          <img src="./img/find-id.svg" alt="A certificate with the certificate ID marked 1 and the QR code marked 2" />
+          <ol class="find-list">
+            <li><strong>Certificate ID.</strong> Printed in the row near the middle of the PDF. Copy it into the box above.</li>
+            <li><strong>QR code.</strong> Bottom right of the PDF. Press Scan QR Code and point the camera at it, or scan it with a phone to open this page with the ID filled in.</li>
+            <li><strong>Email.</strong> The message that came with the PDF also has a link that opens this page with the ID already entered.</li>
+          </ol>
+        </div>
+      </div>
+    </div>
+
+    <aside class="verify-aside">
+      <div class="card">
+        <div class="aside-label">What is checked</div>
+        <ol class="aside-steps">
+          <li>The certificate exists in the organization's records.</li>
+          <li>Its hash matches the hash stored in the smart contract.</li>
+          <li>It has not expired and has not been revoked.</li>
+        </ol>
+      </div>
+
+      <div class="card">
+        <div class="aside-label">What the result means</div>
+        <dl class="result-key">
+          <dt><span class="badge badge-success">Valid</span></dt>
+          <dd>The record matches and the certificate is in force.</dd>
+          <dt><span class="badge badge-warning">Expired</span></dt>
+          <dd>The expiry date has passed.</dd>
+          <dt><span class="badge badge-danger">Revoked</span></dt>
+          <dd>The issuing organization withdrew it.</dd>
+        </dl>
+      </div>
+
+      <div class="card">
+        <div class="aside-label">Where the record lives</div>
+        <p class="aside-note">The hash is stored in a smart contract on the Ethereum Sepolia test network. Every result includes the transaction hash and a link to Etherscan.</p>
+      </div>
+    </aside>
+
+  </div>
+</div>
+
+<!-- Footer -->
+<footer class="site-footer">
+  <div class="footer-inner">
+    <div>
+      <div class="footer-brand"><img src="./img/logo.svg" alt="" />CertChain</div>
+      <p class="footer-about">Issue course certificates and check them against a record in a smart contract on the Ethereum Sepolia test network.</p>
+    </div>
+    <div>
+      <h4>Pages</h4>
+      <ul>
+        <li><a href="./index.html">Home</a></li>
+        <li><a href="./verify.html">Verify a certificate</a></li>
+        <li><a href="./login.html">Organization login</a></li>
+      </ul>
+    </div>
+    <div>
+      <h4>Built with</h4>
+      <ul>
+        <li>Solidity smart contract</li>
+        <li>Ethereum Sepolia testnet</li>
+        <li>Node.js and Express</li>
+        <li>MongoDB</li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">&copy; 2026 CertChain. A course project; certificates are issued on a test network.</div>
+</footer>
+
+<div id="toast-container" class="toast-container"></div>
+<script src="./js/app.js"></script>
+<script src="./js/verify.js"></script>
+</body>
+</html>

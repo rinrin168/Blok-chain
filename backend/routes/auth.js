@@ -4,7 +4,7 @@ const User = require('../models/User');
 
 const router = express.Router();
 
-// ─── POST /api/auth/login ─────────────────────────────────────────────────────
+// POST /api/auth/login
 router.post('/login', async (req, res) => {
   try {
     const { email, password } = req.body;
@@ -48,7 +48,7 @@ router.post('/login', async (req, res) => {
   }
 });
 
-// ─── GET /api/auth/me ─────────────────────────────────────────────────────────
+// GET /api/auth/me
 const protect = require('../middleware/auth');
 router.get('/me', protect, async (req, res) => {
   res.json({

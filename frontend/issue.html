@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Issue Certificate - CertChain</title>
+  <link rel="stylesheet" href="./css/style.css" />
+  <link rel="icon" type="image/svg+xml" href="./img/logo.svg" />
+</head>
+<body class="page-wrapper">
+
+<!-- Navbar -->
+<nav class="navbar">
+  <div class="navbar-inner">
+    <a href="./dashboard.html" class="navbar-brand"><img src="./img/logo.svg" alt="" />CertChain</a>
+    <div class="navbar-crumb"><a href="./dashboard.html">Organization portal</a><span>/</span><strong>Issue certificate</strong></div>
+    <div class="navbar-actions">
+      <div class="navbar-user"><span class="avatar" id="navbar-avatar">C</span><span id="navbar-org">Organization</span></div>
+      <button id="logout-btn" class="btn btn-outline btn-sm">Logout</button>
+    </div>
+  </div>
+</nav>
+
+<div class="dashboard-layout">
+  <!-- Sidebar -->
+  <aside class="sidebar">
+    <div class="sidebar-section">Main</div>
+    <ul class="sidebar-nav">
+      <li><a href="./dashboard.html"    data-page="dashboard">Dashboard</a></li>
+      <li><a href="./issue.html"        data-page="issue">Issue Certificate</a></li>
+      <li><a href="./certificates.html" data-page="certificates">All Certificates</a></li>
+    </ul>
+    <div class="sidebar-section">Public</div>
+    <ul class="sidebar-nav">
+      <li><a href="./verify.html" target="_blank">Verify Page</a></li>
+    </ul>
+  </aside>
+
+  <!-- Main -->
+  <main class="dashboard-body narrow">
+    <div class="page-header-row">
+      <div class="page-header">
+        <h1>Issue a certificate</h1>
+        <p>Fill in the details on the left. The preview on the right shows how the certificate will read.</p>
+      </div>
+    </div>
+
+    <!-- Form Area -->
+    <div id="form-area" class="issue-layout">
+      <div class="card form-card">
+        <form id="issue-form" novalidate>
+
+          <section class="form-section">
+            <div class="form-section-head">
+              <span class="step-num">1</span>
+              <div>
+                <h3>Recipient</h3>
+                <p>Who the certificate is for. The PDF is emailed to this address.</p>
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label class="form-label" for="recipient-name">Full name *</label>
+                <input id="recipient-name" type="text" class="form-control" placeholder="e.g. Sok Dara" required />
+                <div class="form-error"></div>
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="recipient-email">Email address *</label>
+                <input id="recipient-email" type="email" class="form-control" placeholder="e.g. sokdara@email.com" required />
+                <div class="form-error"></div>
+              </div>
+            </div>
+          </section>
+
+          <section class="form-section">
+            <div class="form-section-head">
+              <span class="step-num">2</span>
+              <div>
+                <h3>Course</h3>
+                <p>What the recipient completed.</p>
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="course-name">Course or program name *</label>
+              <input id="course-name" type="text" class="form-control" placeholder="e.g. Full Stack Web Development" required />
+              <div class="form-error"></div>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="course-desc">Description (optional)</label>
+              <textarea id="course-desc" class="form-control" placeholder="A line or two about the course or the achievement" rows="3"></textarea>
+            </div>
+          </section>
+
+          <section class="form-section">
+            <div class="form-section-head">
+              <span class="step-num">3</span>
+              <div>
+                <h3>Dates</h3>
+                <p>Leave the expiry date empty if the certificate does not expire.</p>
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label class="form-label" for="issue-date">Issue date *</label>
+                <input id="issue-date" type="date" class="form-control" required />
+                <div class="form-error"></div>
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="expiry-date">Expiry date (optional)</label>
+                <input id="expiry-date" type="date" class="form-control" />
+              </div>
+            </div>
+          </section>
+
+          <div class="form-footer">
+            <p class="form-note">Submitting writes the hash to the contract on Sepolia. This takes about 10 to 20 seconds.</p>
+            <button id="submit-btn" type="submit" class="btn btn-primary btn-lg">Issue Certificate</button>
+          </div>
+        </form>
+      </div>
+
+      <aside class="issue-aside">
+        <div class="card">
+          <div class="aside-label">Preview</div>
+          <div class="cert-preview">
+            <div class="cp-title">CERTIFICATE</div>
+            <div class="cp-sub">of Completion</div>
+            <div class="cp-presented">This certificate is presented to</div>
+            <div class="cp-name" id="prev-name">Recipient name</div>
+            <div class="cp-course" id="prev-course">Has successfully completed the course</div>
+            <div class="cp-dates" id="prev-dates"></div>
+            <div class="cp-foot"><span class="cp-seal"></span><span id="prev-org">Organization</span></div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="aside-label">After you submit</div>
+          <ol class="aside-steps">
+            <li>The certificate data is hashed and the hash is stored in the contract.</li>
+            <li>The PDF is generated with a QR code.</li>
+            <li>The recipient is sent an email with the PDF attached.</li>
+          </ol>
+        </div>
+      </aside>
+    </div>
+
+    <!-- Success Area (hidden initially) -->
+    <div id="success-area" class="hidden" style="max-width:580px">
+      <div class="success-box">
+        <h3>Certificate Issued Successfully!</h3>
+        <p style="color:var(--text-muted);font-size:14px;margin-bottom:8px">Issued to: <strong id="success-name" style="color:var(--text-primary)"></strong></p>
+        <p style="color:var(--text-muted);font-size:14px">Course: <strong id="success-course" style="color:var(--text-primary)"></strong></p>
+        <div class="cert-id-display" id="success-cert-id"></div>
+        <div style="display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-bottom:16px">
+          <button id="copy-cert-id" class="btn btn-outline btn-sm">Copy Certificate ID</button>
+          <button id="download-pdf-btn" class="btn btn-primary btn-sm">Download PDF</button>
+        </div>
+      </div>
+
+      <div class="blockchain-info mt-4">
+        <div>
+          <div class="bc-label">Blockchain Transaction</div>
+          <div class="bc-value" id="success-tx"></div>
+          <div class="bc-label" style="margin-top:6px">Network: <span id="success-network"></span></div>
+        </div>
+      </div>
+
+      <div style="margin-top:20px">
+        <button id="issue-another-btn" class="btn btn-outline" style="width:100%;justify-content:center">Issue Another Certificate</button>
+      </div>
+    </div>
+  </main>
+</div>
+
+<div id="toast-container" class="toast-container"></div>
+<script src="./js/app.js"></script>
+<script src="./js/issue.js"></script>
+</body>
+</html>

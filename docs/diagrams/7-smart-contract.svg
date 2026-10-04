@@ -1,0 +1,61 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1100 640" width="1100" height="640">
+<defs><marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#3F6370"/></marker></defs>
+<rect width="1100" height="640" fill="#FFFFFF"/>
+<text x="24" y="30" text-anchor="start" font-family="Helvetica, Arial, sans-serif" font-size="16" font-weight="700" fill="#1F2E33">Figure 7. Smart contract design: CertificateRegistry.sol</text>
+<rect x="330" y="60" width="470" height="226" fill="#FFFFFF" stroke="#E1A36F" stroke-width="1.5"/>
+<rect x="330" y="60" width="470" height="30" fill="#FBF3E8" stroke="#E1A36F" stroke-width="1.5"/>
+<text x="565.0" y="79.5" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="13" font-weight="700" fill="#1F2E33">CertificateRegistry</text>
+<text x="340" y="107" font-family="Consolas, monospace" font-size="11" fill="#1F2E33">+ owner : address</text>
+<text x="340" y="123" font-family="Consolas, monospace" font-size="11" fill="#1F2E33">+ totalCertificates : uint256</text>
+<text x="340" y="139" font-family="Consolas, monospace" font-size="11" fill="#1F2E33">- certificates : mapping(string =&gt; Certificate)</text>
+<line x1="330" y1="148" x2="800" y2="148" stroke="#E1A36F"/>
+<text x="340" y="165" font-family="Consolas, monospace" font-size="11" fill="#1F2E33">+ storeCertificate(certificateId : string, dataHash : bytes32)</text>
+<text x="340" y="181" font-family="Consolas, monospace" font-size="11" fill="#1F2E33">      onlyOwner</text>
+<text x="340" y="197" font-family="Consolas, monospace" font-size="11" fill="#1F2E33">+ revokeCertificate(certificateId : string)</text>
+<text x="340" y="213" font-family="Consolas, monospace" font-size="11" fill="#1F2E33">      onlyOwner, certificateExists, certificateNotRevoked</text>
+<text x="340" y="229" font-family="Consolas, monospace" font-size="11" fill="#1F2E33">+ getCertificate(certificateId : string)</text>
+<text x="340" y="245" font-family="Consolas, monospace" font-size="11" fill="#1F2E33">      returns (id, dataHash, issuedBy, issuedAt, isRevoked)</text>
+<text x="340" y="261" font-family="Consolas, monospace" font-size="11" fill="#1F2E33">+ certificateExistsOnChain(certificateId : string) : bool</text>
+<text x="340" y="277" font-family="Consolas, monospace" font-size="11" fill="#1F2E33">+ verifyCertificate(certificateId : string, dataHash : bytes32) : bool</text>
+<rect x="30" y="80" width="250" height="136" fill="#FFFFFF" stroke="#6F9F9C" stroke-width="1.5"/>
+<rect x="30" y="80" width="250" height="30" fill="#E3EFEE" stroke="#6F9F9C" stroke-width="1.5"/>
+<text x="155.0" y="99.5" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="13" font-weight="700" fill="#1F2E33">struct Certificate</text>
+<text x="40" y="127" font-family="Consolas, monospace" font-size="11" fill="#1F2E33">certificateId : string</text>
+<text x="40" y="143" font-family="Consolas, monospace" font-size="11" fill="#1F2E33">dataHash : bytes32</text>
+<text x="40" y="159" font-family="Consolas, monospace" font-size="11" fill="#1F2E33">issuedBy : address</text>
+<text x="40" y="175" font-family="Consolas, monospace" font-size="11" fill="#1F2E33">issuedAt : uint256</text>
+<text x="40" y="191" font-family="Consolas, monospace" font-size="11" fill="#1F2E33">isRevoked : bool</text>
+<text x="40" y="207" font-family="Consolas, monospace" font-size="11" fill="#1F2E33">exists : bool</text>
+<rect x="850" y="80" width="220" height="178" fill="#FFFFFF" stroke="#B9B08A" stroke-width="1.5"/>
+<rect x="850" y="80" width="220" height="30" fill="#F3EFE0" stroke="#B9B08A" stroke-width="1.5"/>
+<text x="960.0" y="99.5" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="13" font-weight="700" fill="#1F2E33">Events</text>
+<text x="860" y="127" font-family="Consolas, monospace" font-size="11" fill="#1F2E33">CertificateIssued(</text>
+<text x="860" y="143" font-family="Consolas, monospace" font-size="11" fill="#1F2E33">  certificateId (indexed),</text>
+<text x="860" y="159" font-family="Consolas, monospace" font-size="11" fill="#1F2E33">  dataHash,</text>
+<text x="860" y="175" font-family="Consolas, monospace" font-size="11" fill="#1F2E33">  issuedBy (indexed),</text>
+<text x="860" y="191" font-family="Consolas, monospace" font-size="11" fill="#1F2E33">  issuedAt)</text>
+<line x1="850" y1="200" x2="1070" y2="200" stroke="#B9B08A"/>
+<text x="860" y="217" font-family="Consolas, monospace" font-size="11" fill="#1F2E33">CertificateRevoked(</text>
+<text x="860" y="233" font-family="Consolas, monospace" font-size="11" fill="#1F2E33">  certificateId (indexed),</text>
+<text x="860" y="249" font-family="Consolas, monospace" font-size="11" fill="#1F2E33">  revokedAt)</text>
+<rect x="30" y="360" width="250" height="88" fill="#FFFFFF" stroke="#577E89" stroke-width="1.5"/>
+<rect x="30" y="360" width="250" height="30" fill="#E4EDF0" stroke="#577E89" stroke-width="1.5"/>
+<text x="155.0" y="379.6" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="13" font-weight="700" fill="#1F2E33">Modifiers</text>
+<text x="40" y="407" font-family="Consolas, monospace" font-size="11" fill="#1F2E33">onlyOwner</text>
+<text x="40" y="423" font-family="Consolas, monospace" font-size="11" fill="#1F2E33">certificateExists(id)</text>
+<text x="40" y="439" font-family="Consolas, monospace" font-size="11" fill="#1F2E33">certificateNotRevoked(id)</text>
+<path d="M330.0,173.0 L305.0,173.0 L305.0,148.0 L280.0,148.0" fill="none" stroke="#3F6370" stroke-width="1.5" marker-end="url(#arr)"/>
+<rect x="279.5" y="164.0" width="76.0" height="18" fill="#FFFFFF" fill-opacity="0.92"/>
+<text x="317.5" y="176.8" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="11" font-weight="400" fill="#1F2E33">stores 0..*</text>
+<path d="M800.0,173.0 L825.0,173.0 L825.0,169.0 L850.0,169.0" fill="none" stroke="#3F6370" stroke-width="1.5" marker-end="url(#arr)"/>
+<rect x="792.5" y="164.0" width="40.0" height="18" fill="#FFFFFF" fill-opacity="0.92"/>
+<text x="812.5" y="176.8" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="11" font-weight="400" fill="#1F2E33">emits</text>
+<path d="M565.0,286.0 L565.0,404.0 L280.0,404.0" fill="none" stroke="#3F6370" stroke-width="1.5" marker-end="url(#arr)"/>
+<rect x="405.5" y="395.0" width="34.0" height="18" fill="#FFFFFF" fill-opacity="0.92"/>
+<text x="422.5" y="407.9" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="11" font-weight="400" fill="#1F2E33">uses</text>
+<text x="330" y="430" text-anchor="start" font-family="Helvetica, Arial, sans-serif" font-size="13" font-weight="700" fill="#1F2E33">Rules enforced on-chain</text>
+<text x="330" y="454" text-anchor="start" font-family="Helvetica, Arial, sans-serif" font-size="12" font-weight="400" fill="#1F2E33">- Only the owner (the address that deployed the contract) can store or revoke.</text>
+<text x="330" y="474" text-anchor="start" font-family="Helvetica, Arial, sans-serif" font-size="12" font-weight="400" fill="#1F2E33">- A certificateId can be stored once; storing it again reverts.</text>
+<text x="330" y="494" text-anchor="start" font-family="Helvetica, Arial, sans-serif" font-size="12" font-weight="400" fill="#1F2E33">- A revoked certificate cannot be revoked again, and verifyCertificate returns false for it.</text>
+<text x="330" y="514" text-anchor="start" font-family="Helvetica, Arial, sans-serif" font-size="12" font-weight="400" fill="#1F2E33">- Reads (getCertificate, verifyCertificate, certificateExistsOnChain) are free view calls.</text>
+</svg>

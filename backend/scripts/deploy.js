@@ -1,5 +1,5 @@
 /**
- * Deploy script — deploys CertificateRegistry.sol to Ethereum Sepolia.
+ * Deploy script - deploys CertificateRegistry.sol to Ethereum Sepolia.
  * Run: node scripts/deploy.js
  */
 require('dotenv').config({ path: require('path').join(__dirname, '..', '.env') });

@@ -19,12 +19,12 @@ const STATUS_LABEL = { active: 'ACTIVE', expired: 'EXPIRED', revoked: 'REVOKED' 
 
 // Brand palette (matches frontend/css/style.css)
 const PALETTE = {
-  gold:   '#E1A36F', // Harvest Gold — primary accent
-  calico: '#DEC484', // Calico — secondary gold
+  gold:   '#E1A36F', // Harvest Gold - primary accent
+  calico: '#DEC484', // Calico - secondary gold
   cream:  '#F8F5E8', // Hampton-derived page background
   card:   '#FCFAF4', // near-white card surface
-  sea:    '#6F9F9C', // Sea Nymph — secondary accent
-  smalt:  '#577E89', // Smalt Blue — decorative blocks
+  sea:    '#6F9F9C', // Sea Nymph - secondary accent
+  smalt:  '#577E89', // Smalt Blue - decorative blocks
   dark:   '#27393E', // derived dark text (from Smalt Blue)
   muted:  '#4A6B74'  // derived muted text
 };
@@ -53,7 +53,7 @@ async function generateCertificatePDF(cert) {
   const qrBuffer = Buffer.from(qrDataUrl.split(',')[1], 'base64');
 
   return new Promise((resolve, reject) => {
-    // Every element below is positioned with absolute x/y, not flowing layout —
+    // Every element below is positioned with absolute x/y, not flowing layout -
     // margins only matter here as the auto-page-break threshold PDFKit uses for
     // .text() calls. Zero margins avoid any element near the edges silently
     // spilling onto an extra page.
@@ -70,11 +70,11 @@ async function generateCertificatePDF(cert) {
     const H = doc.page.height;
     const { gold, calico, cream, card, sea, smalt, dark, muted } = PALETTE;
 
-    // ── Page background ───────────────────────────────────────────────────
+    // Page background
     doc.rect(0, 0, W, H).fill(cream);
 
-    // ── Layered decorative blocks (top-right / bottom-left) ───────────────
-    // A solid Smalt Blue block with a gold-line block offset behind it —
+    // Layered decorative blocks (top-right / bottom-left)
+    // A solid Smalt Blue block with a gold-line block offset behind it -
     // the card drawn on top covers the centers, leaving an L-shaped peek
     // at each corner, echoing the layered template look.
     const blockW = 230, blockH = 190;
@@ -83,13 +83,13 @@ async function generateCertificatePDF(cert) {
     doc.rect(0, H - blockH, blockW, blockH).fill(smalt);
     doc.rect(20, H - blockH - 20, blockW, blockH).lineWidth(2).stroke(gold);
 
-    // ── Card surface ───────────────────────────────────────────────────────
+    // Card surface
     const cardM = 55;
     doc.rect(cardM, cardM, W - cardM * 2, H - cardM * 2).fill(card);
     doc.rect(cardM, cardM, W - cardM * 2, H - cardM * 2).lineWidth(1.5).stroke(gold);
     doc.rect(cardM + 7, cardM + 7, W - (cardM + 7) * 2, H - (cardM + 7) * 2).lineWidth(0.5).stroke(calico);
 
-    // ── Header ─────────────────────────────────────────────────────────────
+    // Header
     doc.font('Times-Bold').fontSize(38).fillColor(dark)
       .text('CERTIFICATE', 0, 86, { align: 'center', characterSpacing: 3 });
     doc.font('Times-Italic').fontSize(17).fillColor(smalt)
@@ -97,7 +97,7 @@ async function generateCertificatePDF(cert) {
 
     doc.moveTo(W / 2 - 90, 162).lineTo(W / 2 + 90, 162).lineWidth(1).stroke(gold);
 
-    // ── Body ───────────────────────────────────────────────────────────────
+    // Body
     doc.font('Helvetica').fontSize(11).fillColor(muted)
       .text('This certificate is presented to', 0, 180, { align: 'center', characterSpacing: 1 });
 
@@ -113,7 +113,7 @@ async function generateCertificatePDF(cert) {
         .text(cert.courseDescription, 110, 282, { align: 'center', width: W - 220, height: 22, ellipsis: true });
     }
 
-    // ── Three-column detail row ────────────────────────────────────────────
+    // Three-column detail row
     const rowY = 320;
     const rowW = 480;
     const colW = rowW / 3;
@@ -133,7 +133,7 @@ async function generateCertificatePDF(cert) {
       if (i > 0) doc.moveTo(cx, rowY - 6).lineTo(cx, rowY + 28).lineWidth(0.75).stroke(calico);
     });
 
-    // ── Footer: date | seal | signature ────────────────────────────────────
+    // Footer: date | seal | signature
     const footerY = H - 115;
 
     const dateLine1 = `Issued: ${formatDate(cert.issueDate)}`;
@@ -144,31 +144,33 @@ async function generateCertificatePDF(cert) {
       .text(dateLine2, cardM + 40, footerY + 15, { width: 180 });
 
     // Seal (center)
-    const sealCx = W / 2, sealCy = footerY + 18;
+    const sealCx = W / 2, sealCy = footerY + 2;
     doc.circle(sealCx, sealCy, 24).lineWidth(1.5).stroke(gold);
     doc.circle(sealCx, sealCy, 18).lineWidth(0.75).stroke(sea);
     doc.polygon(...starPoints(sealCx, sealCy, 12, 5)).fill(gold);
 
-    // Signature (right)
-    const sigX = W - cardM - 220;
-    doc.font('Helvetica-Bold').fontSize(10).fillColor(dark)
-      .text(cert.organizationName, sigX, footerY, { width: 180, align: 'right' });
-    doc.moveTo(sigX, footerY + 16).lineTo(sigX + 180, footerY + 16).lineWidth(1).stroke(gold);
-    doc.font('Helvetica').fontSize(8).fillColor(muted)
-      .text('ISSUING ORGANIZATION', sigX, footerY + 20, { width: 180, align: 'right', characterSpacing: 0.5 });
-
-    // ── QR Code (inside card, bottom-right, clear of the decorative block) ─
+    // QR Code (inside card, bottom-right, clear of the decorative block)
     const qrSize = 78;
     const qrX = W - cardM - qrSize - 14;
-    const qrY = H - cardM - qrSize - 14;
+    const qrY = H - cardM - qrSize - 30;
+
+    // Signature (right of the seal, ending clear of the QR box)
+    const sigW = 160;
+    const sigX = qrX - 5 - 25 - sigW;
+    doc.font('Helvetica-Bold').fontSize(10).fillColor(dark)
+      .text(cert.organizationName, sigX, footerY, { width: sigW, align: 'right' });
+    doc.moveTo(sigX, footerY + 16).lineTo(sigX + sigW, footerY + 16).lineWidth(1).stroke(gold);
+    doc.font('Helvetica').fontSize(8).fillColor(muted)
+      .text('ISSUING ORGANIZATION', sigX, footerY + 20, { width: sigW, align: 'right', characterSpacing: 0.5 });
+
     doc.rect(qrX - 5, qrY - 5, qrSize + 10, qrSize + 10).lineWidth(0.75).stroke(calico).fill('#ffffff');
     doc.image(qrBuffer, qrX, qrY, { width: qrSize, height: qrSize });
     doc.font('Helvetica').fontSize(6).fillColor(muted)
       .text('Scan to verify', qrX - 5, qrY + qrSize + 7, { width: qrSize + 10, align: 'center' });
 
-    // ── Blockchain trace line ──────────────────────────────────────────────
+    // Blockchain trace line
     doc.font('Helvetica').fontSize(6.5).fillColor(muted)
-      .text(`Blockchain TX: ${cert.blockchainTxHash || 'pending'}`, cardM, H - cardM - 12, { width: W - cardM * 2, align: 'center' });
+      .text(`Blockchain TX: ${cert.blockchainTxHash || 'pending'}`, cardM, H - cardM - 28, { width: W - cardM * 2, align: 'center' });
 
     doc.end();
 

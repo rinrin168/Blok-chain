@@ -1,5 +1,5 @@
 /**
- * Seed script — creates the default admin account.
+ * Seed script - creates the default admin account.
  * Run: node scripts/seed.js
  */
 require('dotenv').config({ path: require('path').join(__dirname, '..', '.env') });
@@ -7,7 +7,7 @@ const dns = require('dns');
 const mongoose = require('mongoose');
 const User = require('../models/User');
 
-// See server.js — works around Node's SRV resolver failing on some Windows setups.
+// See server.js - works around Node's SRV resolver failing on some Windows setups.
 dns.setServers(['8.8.8.8', '8.8.4.4']);
 
 async function seed() {
@@ -29,7 +29,7 @@ async function seed() {
       role: 'admin'
     });
 
-    console.log('[SEED] ✅ Admin created successfully!');
+    console.log('[SEED] Admin created successfully!');
     console.log('[SEED]    Email   :', admin.email);
     console.log('[SEED]    Password: Admin@1234');
     console.log('[SEED]    Org     :', admin.organizationName);

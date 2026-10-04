@@ -5,7 +5,7 @@ const path = require('path');
 const fs = require('fs');
 const protect = require('../middleware/auth');
 const Certificate = require('../models/Certificate');
-const { storeCertificateOnChain, revokeCertificateOnChain, computeCertificateHash } = require('../services/blockchain');
+const { storeCertificateOnChain, revokeCertificateOnChain, computeCertificateHash, getChainInfo } = require('../services/blockchain');
 const { generateCertificatePDF } = require('../services/pdf');
 const { sendCertificateEmail } = require('../services/email');
 
@@ -16,7 +16,7 @@ router.use(protect);
 
 // :id may be a Mongo _id or a public certificateId (e.g. "CERT-XXXX"). Mongoose
 // casts every branch of an $or up front, so including a non-ObjectId string
-// under _id throws a CastError instead of just not matching — only add that
+// under _id throws a CastError instead of just not matching - only add that
 // branch when the id actually looks like an ObjectId.
 function findCertQuery(id, issuedBy) {
   const query = { issuedBy };
@@ -26,7 +26,7 @@ function findCertQuery(id, issuedBy) {
   return query;
 }
 
-// ─── POST /api/certificates/issue ────────────────────────────────────────────
+// POST /api/certificates/issue
 router.post('/issue', async (req, res) => {
   try {
     const { recipientName, recipientEmail, courseName, courseDescription, issueDate, expiryDate } = req.body;
@@ -98,7 +98,7 @@ router.post('/issue', async (req, res) => {
   }
 });
 
-// ─── GET /api/certificates ────────────────────────────────────────────────────
+// GET /api/certificates
 router.get('/', async (req, res) => {
   try {
     const { status, search } = req.query;
@@ -139,7 +139,16 @@ router.get('/', async (req, res) => {
   }
 });
 
-// ─── GET /api/certificates/stats ─────────────────────────────────────────────
+// GET /api/certificates/chain-info
+router.get('/chain-info', async (req, res) => {
+  try {
+    res.json({ success: true, chain: await getChainInfo() });
+  } catch (err) {
+    res.status(500).json({ success: false, message: err.message });
+  }
+});
+
+// GET /api/certificates/stats
 router.get('/stats', async (req, res) => {
   try {
     const all = await Certificate.find({ issuedBy: req.user._id });
@@ -158,7 +167,7 @@ router.get('/stats', async (req, res) => {
   }
 });
 
-// ─── GET /api/certificates/:id ────────────────────────────────────────────────
+// GET /api/certificates/:id
 router.get('/:id', async (req, res) => {
   try {
     const cert = await Certificate.findOne(findCertQuery(req.params.id, req.user._id));
@@ -171,7 +180,7 @@ router.get('/:id', async (req, res) => {
   }
 });
 
-// ─── GET /api/certificates/:id/pdf ───────────────────────────────────────────
+// GET /api/certificates/:id/pdf
 router.get('/:id/pdf', async (req, res) => {
   try {
     const cert = await Certificate.findOne(findCertQuery(req.params.id, req.user._id));
@@ -194,7 +203,7 @@ router.get('/:id/pdf', async (req, res) => {
   }
 });
 
-// ─── PATCH /api/certificates/:id/revoke ──────────────────────────────────────
+// PATCH /api/certificates/:id/revoke
 router.patch('/:id/revoke', async (req, res) => {
   try {
     const cert = await Certificate.findOne(findCertQuery(req.params.id, req.user._id));

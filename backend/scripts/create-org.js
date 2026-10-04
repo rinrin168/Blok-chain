@@ -31,7 +31,7 @@ async function run() {
       role: 'admin'
     });
 
-    console.log('[CREATE-ORG] ✅ Account created successfully!');
+    console.log('[CREATE-ORG] Account created successfully!');
     console.log('[CREATE-ORG]    Email   :', user.email);
     console.log('[CREATE-ORG]    Password:', PASSWORD);
     console.log('[CREATE-ORG]    Org     :', user.organizationName);
