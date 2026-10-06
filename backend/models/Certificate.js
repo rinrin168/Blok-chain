@@ -90,7 +90,6 @@ certificateSchema.set('toJSON', { virtuals: true });
 certificateSchema.set('toObject', { virtuals: true });
 
 // Index for fast lookups
-certificateSchema.index({ certificateId: 1 });
 certificateSchema.index({ issuedBy: 1 });
 certificateSchema.index({ recipientEmail: 1 });
 
