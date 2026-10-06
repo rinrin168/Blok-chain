@@ -21,7 +21,28 @@ const verifyRoutes = require('./routes/verify');
 const app = express();
 const PORT = process.env.PORT || 5000;
 
-// Middleware
+// ──────────────────────────────────────────────────────────────
+// Database Connection (with connection caching for serverless)
+// ──────────────────────────────────────────────────────────────
+let isConnected = false;
+async function connectDB() {
+  if (isConnected || mongoose.connection.readyState >= 1) {
+    isConnected = true;
+    return;
+  }
+  if (!process.env.MONGODB_URI) {
+    throw new Error('MONGODB_URI environment variable is not defined');
+  }
+  await mongoose.connect(process.env.MONGODB_URI, {
+    serverSelectionTimeoutMS: 10000,
+  });
+  isConnected = true;
+  console.log('[DB] Connected to MongoDB');
+}
+
+// ──────────────────────────────────────────────────────────────
+// Global Middleware
+// ──────────────────────────────────────────────────────────────
 app.use(cors({
   origin: '*',
   methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
@@ -30,17 +51,33 @@ app.use(cors({
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
+// Ensure DB is connected before any /api route (critical for serverless)
+app.use(async (req, res, next) => {
+  if (req.path.startsWith('/api')) {
+    try {
+      await connectDB();
+    } catch (err) {
+      console.error('[DB] Connection error:', err.message);
+      return res.status(500).json({
+        success: false,
+        message: 'Database connection failed.',
+        error: err.message
+      });
+    }
+  }
+  next();
+});
+
+// ──────────────────────────────────────────────────────────────
+// Routes
+// ──────────────────────────────────────────────────────────────
+
 // Serve static PDF files
 app.use('/pdfs', express.static(path.join(__dirname, 'pdfs')));
 
-// Routes
 app.use('/api/auth', authRoutes);
 app.use('/api/certificates', certificateRoutes);
 app.use('/api/verify', verifyRoutes);
-
-// Serve the frontend (HTML/CSS/JS) from this same Node.js server instead of
-// opening the files directly from disk.
-app.use(express.static(path.join(__dirname, '..', 'frontend')));
 
 // Health check
 app.get('/api/health', (req, res) => {
@@ -52,7 +89,12 @@ app.get('/api/health', (req, res) => {
   });
 });
 
-// Error Handler
+// Serve the frontend static files
+app.use(express.static(path.join(__dirname, '..', 'frontend')));
+
+// ──────────────────────────────────────────────────────────────
+// Error Handlers
+// ──────────────────────────────────────────────────────────────
 app.use((err, req, res, next) => {
   console.error('[ERROR]', err.message);
   res.status(err.status || 500).json({
@@ -61,62 +103,25 @@ app.use((err, req, res, next) => {
   });
 });
 
-// 404 handler
 app.use((req, res) => {
   res.status(404).json({ success: false, message: 'Route not found' });
 });
 
-// Database Connection with connection caching for serverless environments
-let isConnected = false;
-async function connectDB() {
-  if (isConnected || mongoose.connection.readyState >= 1) {
-    return;
-  }
-  if (!process.env.MONGODB_URI) {
-    console.error('[DB] MONGODB_URI environment variable is missing.');
-    throw new Error('MONGODB_URI environment variable is not defined');
-  }
-  try {
-    await mongoose.connect(process.env.MONGODB_URI, {
-      serverSelectionTimeoutMS: 8000,
-    });
-    isConnected = true;
-    console.log('[DB] Connected to MongoDB');
-  } catch (err) {
-    console.error('[DB] MongoDB connection failed:', err.message);
-    if (!process.env.VERCEL) {
-      process.exit(1);
-    }
-    throw err;
-  }
-}
-
-// Connect to DB before handling API routes in serverless mode
-app.use(async (req, res, next) => {
-  if (req.path.startsWith('/api') && mongoose.connection.readyState !== 1) {
-    try {
-      await connectDB();
-    } catch (err) {
-      return res.status(500).json({
-        success: false,
-        message: 'Database connection failed. Please ensure MONGODB_URI is set in environment variables.',
-        error: err.message
-      });
-    }
-  }
-  next();
-});
-
-// Start standalone HTTP server locally (Vercel handles routing automatically)
+// ──────────────────────────────────────────────────────────────
+// Start server locally (Vercel handles this automatically)
+// ──────────────────────────────────────────────────────────────
 if (!process.env.VERCEL) {
-  connectDB().then(() => {
-    app.listen(PORT, () => {
-      console.log(`[SERVER] CertChain API running on http://localhost:${PORT}`);
-      console.log(`[CHAIN]  Mode: ${process.env.ETHEREUM_RPC_URL ? 'Ethereum Sepolia' : 'Simulation'}`);
+  connectDB()
+    .then(() => {
+      app.listen(PORT, () => {
+        console.log(`[SERVER] CertChain API running on http://localhost:${PORT}`);
+        console.log(`[CHAIN]  Mode: ${process.env.ETHEREUM_RPC_URL ? 'Ethereum Sepolia' : 'Simulation'}`);
+      });
+    })
+    .catch((err) => {
+      console.error('[DB] Startup failed:', err.message);
+      process.exit(1);
     });
-  }).catch((err) => {
-    console.error('[DB] Startup failed:', err.message);
-  });
 }
 
 module.exports = app;
