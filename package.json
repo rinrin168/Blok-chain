@@ -1,0 +1,12 @@
+{
+  "name": "certchain-workspace",
+  "version": "1.0.0",
+  "description": "CertChain - Blockchain-Based Certificate Verification System",
+  "scripts": {
+    "start": "npm --prefix backend start",
+    "dev": "npm --prefix backend run dev"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}

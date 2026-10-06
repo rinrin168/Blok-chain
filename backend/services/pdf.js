@@ -35,8 +35,8 @@ const PALETTE = {
  * @returns {string} The absolute path to the generated PDF
  */
 async function generateCertificatePDF(cert) {
-  // Ensure pdfs directory exists
-  const pdfDir = path.join(__dirname, '..', 'pdfs');
+  // Ensure pdfs directory exists (/tmp on Vercel/serverless)
+  const pdfDir = process.env.VERCEL ? path.join('/tmp', 'pdfs') : path.join(__dirname, '..', 'pdfs');
   if (!fs.existsSync(pdfDir)) fs.mkdirSync(pdfDir, { recursive: true });
 
   const filename = `Certificate-${cert.certificateId}.pdf`;

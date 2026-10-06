@@ -5,10 +5,14 @@ const mongoose = require('mongoose');
 const cors = require('cors');
 const path = require('path');
 
-// Node's own resolver can fail SRV lookups on some Windows setups even when the
-// system DNS works fine (ECONNREFUSED on querySrv). Pointing it at a public
-// resolver sidesteps that.
-dns.setServers(['8.8.8.8', '8.8.4.4']);
+// Custom DNS for local Windows SRV lookups (disabled on Vercel/Linux environments)
+if (process.platform === 'win32' && !process.env.VERCEL) {
+  try {
+    dns.setServers(['8.8.8.8', '8.8.4.4']);
+  } catch (err) {
+    // Ignore if not supported in environment
+  }
+}
 
 const authRoutes = require('./routes/auth');
 const certificateRoutes = require('./routes/certificates');
@@ -62,16 +66,57 @@ app.use((req, res) => {
   res.status(404).json({ success: false, message: 'Route not found' });
 });
 
-// Database Connection
-mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/certchain')
-  .then(() => {
+// Database Connection with connection caching for serverless environments
+let isConnected = false;
+async function connectDB() {
+  if (isConnected || mongoose.connection.readyState >= 1) {
+    return;
+  }
+  if (!process.env.MONGODB_URI) {
+    console.error('[DB] MONGODB_URI environment variable is missing.');
+    throw new Error('MONGODB_URI environment variable is not defined');
+  }
+  try {
+    await mongoose.connect(process.env.MONGODB_URI, {
+      serverSelectionTimeoutMS: 8000,
+    });
+    isConnected = true;
     console.log('[DB] Connected to MongoDB');
+  } catch (err) {
+    console.error('[DB] MongoDB connection failed:', err.message);
+    if (!process.env.VERCEL) {
+      process.exit(1);
+    }
+    throw err;
+  }
+}
+
+// Connect to DB before handling API routes in serverless mode
+app.use(async (req, res, next) => {
+  if (req.path.startsWith('/api') && mongoose.connection.readyState !== 1) {
+    try {
+      await connectDB();
+    } catch (err) {
+      return res.status(500).json({
+        success: false,
+        message: 'Database connection failed. Please ensure MONGODB_URI is set in environment variables.',
+        error: err.message
+      });
+    }
+  }
+  next();
+});
+
+// Start standalone HTTP server locally (Vercel handles routing automatically)
+if (!process.env.VERCEL) {
+  connectDB().then(() => {
     app.listen(PORT, () => {
       console.log(`[SERVER] CertChain API running on http://localhost:${PORT}`);
       console.log(`[CHAIN]  Mode: ${process.env.ETHEREUM_RPC_URL ? 'Ethereum Sepolia' : 'Simulation'}`);
     });
-  })
-  .catch((err) => {
-    console.error('[DB] MongoDB connection failed:', err.message);
-    process.exit(1);
+  }).catch((err) => {
+    console.error('[DB] Startup failed:', err.message);
   });
+}
+
+module.exports = app;
